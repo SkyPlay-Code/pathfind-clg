@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder | Discovery Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #09090b; color: #fafafa; }
+        .glass { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: linear-gradient(145deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.8) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+        
+        /* Smooth image zoom on hover */
+        .img-zoom-container { overflow: hidden; }
+        .img-zoom-container img { transition: transform 0.7s ease; }
+        .group:hover .img-zoom-container img { transform: scale(1.08); }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+
+        /* Custom utility to hide scrollbar for the horizontal filter row */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-cyan-500 selection:text-black">
+
+    <aside class="w-64 border-r border-white/10 flex flex-col hidden lg:flex bg-[#09090b] z-10" aria-label="Sidebar Navigation">
+        <div class="h-20 flex items-center px-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.3)]" aria-hidden="true">P</div>
+                <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
+            </div>
+        </div>
+        <nav class="p-4 space-y-1 mt-4">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-zinc-800/50 text-cyan-400 border border-white/5 transition-all" aria-current="page">
+                <span class="font-medium text-sm">Discovery</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800/50 transition-all">
+                <span class="font-medium text-sm">Dashboard</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-screen overflow-hidden">
+        
+        <header class="glass z-20 sticky top-0 border-b border-white/5 px-8 py-6 flex flex-col gap-4">
+            <div class="flex justify-between items-end flex-wrap gap-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight">Explore Matches</h1>
+                    <p class="text-zinc-400 text-sm mt-1">Based on your Robotics major and preference for urban campuses.</p>
+                </div>
+                
+                <!-- Search wrapped in a form -->
+                <form class="relative w-full md:w-64" id="search-form">
+                    <input type="search" aria-label="Search schools" placeholder="Search specific school..." 
+                           class="w-full bg-zinc-900 border border-white/10 text-white text-sm rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+                    <svg class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </form>
+            </div>
+
+            <!-- Horizontal Filter Scroll Row -->
+            <div class="flex gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-hide" id="filter-container" role="tablist" aria-label="College Filters">
+                <button role="tab" aria-selected="true" class="filter-btn bg-cyan-500 text-black px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition">All Matches</button>
+                <button role="tab" aria-selected="false" class="filter-btn glass px-4 py-1.5 rounded-full text-xs font-bold text-zinc-300 whitespace-nowrap hover:bg-zinc-800 transition flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400"></span> Targets</button>
+                <button role="tab" aria-selected="false" class="filter-btn glass px-4 py-1.5 rounded-full text-xs font-bold text-zinc-300 whitespace-nowrap hover:bg-zinc-800 transition flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Reaches</button>
+                <button role="tab" aria-selected="false" class="filter-btn glass px-4 py-1.5 rounded-full text-xs font-bold text-zinc-300 whitespace-nowrap hover:bg-zinc-800 transition">Tech-Heavy</button>
+                <button role="tab" aria-selected="false" class="filter-btn glass px-4 py-1.5 rounded-full text-xs font-bold text-zinc-300 whitespace-nowrap hover:bg-zinc-800 transition">High Aid</button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 pb-32">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <article class="glass-card rounded-[2rem] overflow-hidden group border border-white/10 hover:border-cyan-500/50 transition-all duration-300 cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500" tabindex="0">
+                    <div class="relative h-48 img-zoom-container">
+                        <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&w=800&q=80" alt="Stanford University Campus with palm trees" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#18181b] via-[#18181b]/40 to-transparent pointer-events-none"></div>
+                        <div class="absolute top-4 right-4 bg-zinc-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg" aria-label="94 percent match">
+                            <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse"></span> 94% Match
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Stanford University</h3>
+                        <p class="text-sm text-zinc-400 mb-4 mt-2 line-clamp-2">The absolute pinnacle for Mechatronics. Your GitHub portfolio makes this a strong reach.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2 py-1 bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/20">REACH</span>
+                            <span class="text-[10px] font-bold px-2 py-1 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">PRIVATE</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="glass-card rounded-[2rem] overflow-hidden group border border-white/10 hover:border-cyan-500/50 transition-all duration-300 cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500" tabindex="0">
+                    <div class="relative h-48 img-zoom-container">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80" alt="UT Austin campus building with clocktower in the background" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#18181b] via-[#18181b]/40 to-transparent pointer-events-none"></div>
+                        <div class="absolute top-4 right-4 bg-zinc-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg" aria-label="89 percent match">
+                            <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> 89% Match
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">UT Austin</h3>
+                        <p class="text-sm text-zinc-400 mb-4 mt-2 line-clamp-2">In-state advantage. Their robotics lab is heavily funded and you easily clear the GPA threshold.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2 py-1 bg-green-500/10 text-green-400 rounded-md border border-green-500/20">TARGET</span>
+                            <span class="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded-md border border-emerald-500/20">PUBLIC</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="glass-card rounded-[2rem] overflow-hidden group border border-white/10 hover:border-cyan-500/50 transition-all duration-300 cursor-pointer focus-within:ring-2 focus-within:ring-cyan-500" tabindex="0">
+                    <div class="relative h-48 img-zoom-container">
+                        <img src="https://images.unsplash.com/photo-1590005354167-6da97ce1d4c0?auto=format&fit=crop&w=800&q=80" alt="Students walking on Carnegie Mellon campus" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#18181b] via-[#18181b]/40 to-transparent pointer-events-none"></div>
+                        <div class="absolute top-4 right-4 bg-zinc-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg" aria-label="82 percent match">
+                            <span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span> 82% Match
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Carnegie Mellon</h3>
+                        <p class="text-sm text-zinc-400 mb-4 mt-2 line-clamp-2">World-class AI department. You need a slightly higher SAT Math score to move this from a Reach to a Target.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2 py-1 bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/20">REACH</span>
+                            <span class="text-[10px] font-bold px-2 py-1 bg-purple-500/10 text-purple-400 rounded-md border border-purple-500/20">TECH FOCUS</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Prevent search form submission from reloading page
+            const searchForm = document.getElementById('search-form');
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add actual search logic here
+            });
+
+            // Interactive logic for the Filter Buttons
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset all buttons to default "glass" state
+                    filterBtns.forEach(b => {
+                        b.setAttribute('aria-selected', 'false');
+                        b.classList.remove('bg-cyan-500', 'text-black');
+                        b.classList.add('glass', 'text-zinc-300', 'hover:bg-zinc-800');
+                    });
+                    
+                    // Set clicked button to "active" state
+                    btn.setAttribute('aria-selected', 'true');
+                    btn.classList.add('bg-cyan-500', 'text-black');
+                    btn.classList.remove('glass', 'text-zinc-300', 'hover:bg-zinc-800');
+                });
+            });
+        });
+    </script>
+    <script src="hub-nav.js"></script>
+</body>
+</html>

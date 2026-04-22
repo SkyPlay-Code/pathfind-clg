@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder | Executive Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #a1a1aa; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Utilitarian borders and surfaces */
+        .surface { background-color: #0f0f11; border: 1px solid #27272a; }
+        .surface-hover:hover { border-color: #3f3f46; background-color: #18181b; }
+        
+        /* Thin, clean scrollbars */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-zinc-800 selection:text-white">
+
+    <aside class="w-64 border-r border-zinc-800/60 bg-[#0a0a0a] flex flex-col justify-between hidden lg:flex z-10" aria-label="Sidebar Navigation">
+        <div>
+            <div class="h-14 flex items-center px-5 border-b border-zinc-800/60">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-5 h-5 bg-zinc-200 rounded-sm flex items-center justify-center font-bold text-black text-xs" aria-hidden="true">P</div>
+                    <span class="font-semibold text-zinc-200 text-sm tracking-tight">Pathfinder</span>
+                </div>
+            </div>
+            
+            <nav class="p-3 space-y-0.5 mt-2">
+                <p class="px-3 text-[10px] font-semibold text-zinc-500 uppercase tracking-widest mb-2" aria-hidden="true">Workspace</p>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-zinc-800/50 text-zinc-200 transition-colors" aria-current="page">
+                    <span class="text-sm font-medium">Overview</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 transition-colors">
+                    <span class="text-sm font-medium">Application Strategy</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30 transition-colors">
+                    <span class="text-sm font-medium">Financial Modeling</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-zinc-800/60">
+            <div class="flex items-center justify-between" aria-label="System Status">
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                    <span class="text-xs text-zinc-400">System Online</span>
+                </div>
+                <span class="text-[10px] font-mono text-zinc-600">v2.4.1</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-screen overflow-hidden bg-[#0a0a0a]">
+        
+        <header class="h-14 border-b border-zinc-800/60 flex items-center px-6 sticky top-0 z-30">
+            <!-- Wrapped in a form to handle submissions -->
+            <form id="command-form" class="w-full max-w-2xl relative flex items-center">
+                <svg class="w-4 h-4 text-zinc-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="command-input" placeholder="Type a command or ask Pathfinder AI..." aria-label="Command Input"
+                       class="w-full bg-transparent border-none text-zinc-200 text-sm focus:outline-none focus:ring-0 placeholder:text-zinc-600" autocomplete="off">
+                <div class="absolute right-0 flex gap-2 pointer-events-none" aria-hidden="true">
+                    <span class="text-[10px] border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded font-mono">⌘</span>
+                    <span class="text-[10px] border border-zinc-700 text-zinc-500 px-1.5 py-0.5 rounded font-mono">K</span>
+                </div>
+            </form>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 pb-32">
+            <div class="max-w-5xl mx-auto space-y-6">
+                
+                <div class="flex justify-between items-end mb-4">
+                    <div>
+                        <h1 class="text-2xl font-semibold text-zinc-100 tracking-tight">Candidate Profile</h1>
+                        <p class="text-sm text-zinc-500 mt-1">Viewing predictive models for Stanford University.</p>
+                    </div>
+                    <button class="bg-zinc-200 hover:bg-white text-black text-xs font-semibold px-4 py-2 rounded-md transition-colors shadow-sm">
+                        Generate Report
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" aria-label="Profile Metrics">
+                    <div class="surface p-4 rounded-xl">
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold mb-1">Academic Index</p>
+                        <p class="text-2xl font-semibold text-zinc-200">3.95 <span class="text-sm font-normal text-zinc-600">/ 4.0</span></p>
+                    </div>
+                    <div class="surface p-4 rounded-xl">
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold mb-1">Standardized Test</p>
+                        <p class="text-2xl font-semibold text-zinc-200">1480 <span class="text-sm font-normal text-zinc-600">SAT</span></p>
+                    </div>
+                    <div class="surface p-4 rounded-xl border-l-2 border-l-blue-500/50">
+                        <p class="text-[10px] uppercase tracking-widest text-blue-400 font-semibold mb-1">Target Deadline</p>
+                        <p class="text-2xl font-semibold text-zinc-200">14 <span class="text-sm font-normal text-zinc-600">Days</span></p>
+                    </div>
+                    <div class="surface p-4 rounded-xl">
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold mb-1">Est. Probability</p>
+                        <p class="text-2xl font-semibold text-zinc-200">18% <span class="text-sm font-normal text-green-500/70 text-xs" aria-label="Up 2 percent">↑ 2%</span></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <div class="surface p-6 rounded-xl flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-sm font-semibold text-zinc-200">Admissions Probability Matrix</h2>
+                            <span class="text-[10px] border border-zinc-700 bg-zinc-800/50 text-zinc-400 px-2 py-1 rounded">Stanford Avg</span>
+                        </div>
+                        <div class="flex-1 w-full relative min-h-[250px]">
+                            <canvas id="radarChart" aria-label="Radar chart showing candidate score versus Stanford average"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="surface p-6 rounded-xl flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-sm font-semibold text-zinc-200">Strategic Action Plan</h2>
+                            <span class="text-xs text-zinc-500" id="task-counter">1 of 3 Completed</span>
+                        </div>
+                        
+                        <div class="space-y-3 flex-1" id="task-list">
+                            <!-- Task 1 (Already done) -->
+                            <div class="task-item flex items-start gap-3 p-3 rounded-lg border border-zinc-800 bg-zinc-900/30 opacity-60 cursor-pointer transition-all" data-done="true" role="checkbox" aria-checked="true" tabindex="0">
+                                <div class="task-icon text-zinc-500 mt-0.5 flex-shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="task-title text-sm text-zinc-300 font-medium line-through">Finalize Robotics Portfolio</h4>
+                                    <p class="text-[10px] text-zinc-500 mt-0.5 font-mono">Logged: Sep 12</p>
+                                </div>
+                            </div>
+
+                            <!-- Task 2 (High Priority) -->
+                            <div class="task-item flex items-start gap-3 p-3 rounded-lg border border-zinc-700 bg-zinc-800/50 surface-hover cursor-pointer transition-all" data-done="false" role="checkbox" aria-checked="false" tabindex="0">
+                                <div class="task-icon w-4 h-4 rounded-full border-2 border-blue-500 mt-0.5 flex-shrink-0 flex items-center justify-center"></div>
+                                <div class="w-full">
+                                    <div class="flex justify-between items-center">
+                                        <h4 class="task-title text-sm text-zinc-100 font-medium">Refine Personal Statement</h4>
+                                        <span class="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-medium">High Priority</span>
+                                    </div>
+                                    <p class="text-xs text-zinc-400 mt-1 line-clamp-1">AI scan indicates essay lacks emphasis on intellectual vitality.</p>
+                                </div>
+                            </div>
+
+                            <!-- Task 3 -->
+                            <div class="task-item flex items-start gap-3 p-3 rounded-lg border border-zinc-800 bg-transparent surface-hover cursor-pointer transition-all" data-done="false" role="checkbox" aria-checked="false" tabindex="0">
+                                <div class="task-icon w-4 h-4 rounded-full border-2 border-zinc-700 mt-0.5 flex-shrink-0 flex items-center justify-center"></div>
+                                <div>
+                                    <h4 class="task-title text-sm text-zinc-400 font-medium">Submit Official Transcripts</h4>
+                                    <p class="text-[10px] text-zinc-500 mt-0.5">Deadline: Nov 1</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-zinc-800">
+                            <button class="w-full text-xs text-zinc-400 hover:text-zinc-200 text-left flex items-center gap-2 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Draft email to counselor regarding transcripts...
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. CMD+K & Command Form Logic ---
+            const cmdInput = document.getElementById('command-input');
+            const cmdForm = document.getElementById('command-form');
+
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    cmdInput.focus();
+                }
+            });
+
+            cmdForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (cmdInput.value.trim() !== '') {
+                    console.log("Command executed:", cmdInput.value);
+                    cmdInput.value = ''; // clear after "running"
+                    cmdInput.blur();
+                }
+            });
+
+            // --- 2. Interactive Task List Logic ---
+            const tasks = document.querySelectorAll('.task-item');
+            const taskCounter = document.getElementById('task-counter');
+
+            function updateCounter() {
+                const completed = document.querySelectorAll('.task-item[data-done="true"]').length;
+                taskCounter.textContent = `${completed} of ${tasks.length} Completed`;
+            }
+
+            tasks.forEach(task => {
+                // Support keyboard interaction (Enter/Space)
+                task.addEventListener('keydown', (e) => {
+                    if(e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        task.click();
+                    }
+                });
+
+                task.addEventListener('click', () => {
+                    const isDone = task.getAttribute('data-done') === 'true';
+                    const title = task.querySelector('.task-title');
+                    const iconContainer = task.querySelector('.task-icon');
+
+                    if (isDone) {
+                        // Mark Undone
+                        task.setAttribute('data-done', 'false');
+                        task.setAttribute('aria-checked', 'false');
+                        task.classList.remove('opacity-60', 'bg-zinc-900/30', 'border-zinc-800');
+                        task.classList.add('surface-hover', 'border-zinc-700', 'bg-transparent');
+                        title.classList.remove('line-through', 'text-zinc-300');
+                        title.classList.add('text-zinc-100');
+                        
+                        // Revert Icon to circle
+                        iconContainer.innerHTML = '';
+                        iconContainer.className = 'task-icon w-4 h-4 rounded-full border-2 border-zinc-700 mt-0.5 flex-shrink-0 flex items-center justify-center';
+                        
+                        // Re-add high priority styling if it has the badge
+                        if(task.innerHTML.includes('High Priority')) {
+                           task.classList.add('bg-zinc-800/50');
+                           iconContainer.classList.replace('border-zinc-700', 'border-blue-500');
+                        }
+                    } else {
+                        // Mark Done
+                        task.setAttribute('data-done', 'true');
+                        task.setAttribute('aria-checked', 'true');
+                        task.classList.add('opacity-60', 'bg-zinc-900/30', 'border-zinc-800');
+                        task.classList.remove('surface-hover', 'border-zinc-700', 'bg-zinc-800/50', 'bg-transparent');
+                        title.classList.add('line-through', 'text-zinc-300');
+                        title.classList.remove('text-zinc-100', 'text-zinc-400');
+                        
+                        // Change Icon to Checkmark
+                        iconContainer.className = 'task-icon text-zinc-500 mt-0.5 flex-shrink-0';
+                        iconContainer.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    }
+                    updateCounter();
+                });
+            });
+
+            // --- 3. Radar Chart Initialization ---
+            const canvas = document.getElementById('radarChart');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels:['Academics', 'Test Scores', 'Leadership', 'STEM', 'Volunteer', 'Essays'],
+                        datasets: [{
+                            label: 'Stanford Average',
+                            data:[95, 90, 85, 80, 80, 90],
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            pointRadius: 0
+                        }, {
+                            label: 'Candidate',
+                            data: [98, 85, 50, 95, 60, 75],
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)', // Muted blue
+                            borderColor: 'rgba(59, 130, 246, 0.8)',
+                            borderWidth: 1.5,
+                            pointBackgroundColor: '#0a0a0a',
+                            pointBorderColor: 'rgba(59, 130, 246, 0.8)',
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: '#27272a' },
+                                grid: { color: '#27272a' },
+                                pointLabels: { color: '#71717a', font: { family: "'Inter', sans-serif", size: 10 } },
+                                ticks: { display: false, min: 0, max: 100 }
+                            }
+                        },
+                        plugins: {
+                            legend: { labels: { color: '#a1a1aa', boxWidth: 10, font: { family: "'Inter', sans-serif", size: 11 } } },
+                            tooltip: { backgroundColor: '#18181b', titleColor: '#e4e4e7', bodyColor: '#a1a1aa', borderColor: '#27272a', borderWidth: 1 }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="hub-nav.js"></script>
+</body>
+</html>

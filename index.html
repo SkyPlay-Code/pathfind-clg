@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pathfinder AI - Stop guessing. Know what it takes to get in.">
+    <title>Pathfinder AI | College Admissions Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #09090b; color: #fafafa; }
+        .glass { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: linear-gradient(145deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.8) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+        
+        /* Ambient Background Glow */
+        .ambient-glow {
+            position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(34,211,238,0.1) 0%, rgba(0,0,0,0) 70%);
+            top: -200px; left: 50%; transform: translateX(-50%); z-index: -1; pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden antialiased selection:bg-cyan-500 selection:text-black">
+
+    <div class="ambient-glow"></div>
+
+    <header class="w-full flex items-center justify-between px-8 py-6 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.3)]">P</div>
+            <span class="font-extrabold tracking-wide text-xl">Pathfinder</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-zinc-400">
+            <a href="#" class="hover:text-cyan-400 transition">How it Works</a>
+            <a href="#" class="hover:text-cyan-400 transition">Success Rates</a>
+        </nav>
+        <button class="px-5 py-2.5 rounded-full bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-sm font-bold transition">Sign In</button>
+    </header>
+
+    <main class="flex-1 flex flex-col items-center justify-center px-4 text-center z-10 -mt-10">
+        
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-8">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            Pathfinder Alpha is Live
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight">
+            Stop guessing. <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Know what it takes</span> to get in.
+        </h1>
+        
+        <p class="text-lg md:text-xl text-zinc-400 mb-12 max-w-2xl">
+            Drop the generic advice. Pathfinder uses AI to analyze millions of data points and build your personalized roadmap to top universities.
+        </p>
+
+        <!-- Improved: Wrapped inside a <form> for better submission handling -->
+        <form id="search-form" class="w-full max-w-2xl relative group mb-16">
+            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg class="w-6 h-6 text-cyan-400 group-focus-within:text-cyan-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            
+            <input type="text" id="college-search" placeholder="Which college are you dreaming of?" aria-label="Target College" required
+                   class="w-full bg-zinc-900/80 border-2 border-white/10 text-white text-lg md:text-xl rounded-2xl pl-14 pr-32 py-5 focus:outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/20 transition-all shadow-[0_0_30px_rgba(0,0,0,0.5)] placeholder:text-zinc-600">
+            
+            <button type="submit" id="start-btn" class="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold px-6 rounded-xl transition-all flex items-center gap-2">
+                Start <span class="hidden md:inline">Journey</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </form>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full text-left">
+            <div class="glass-card p-6 rounded-3xl hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4 border border-cyan-500/20 text-cyan-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+                <h3 class="text-white font-bold mb-2">Live Probability Engine</h3>
+                <p class="text-sm text-zinc-400">See exactly how your GPA and SAT scores stack up against the current admitted class.</p>
+            </div>
+            
+            <div class="glass-card p-6 rounded-3xl hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mb-4 border border-purple-500/20 text-purple-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                </div>
+                <h3 class="text-white font-bold mb-2">Spiky Skill Trees</h3>
+                <p class="text-sm text-zinc-400">Stop doing random extracurriculars. Get a targeted, gamified roadmap of what to do next.</p>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4 border border-emerald-500/20 text-emerald-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-white font-bold mb-2">Financial Reality Check</h3>
+                <p class="text-sm text-zinc-400">Bypass the sticker shock. Instantly calculate your true cost and expected scholarship aid.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('college-search');
+
+            searchForm.addEventListener('submit', function (e) {
+                e.preventDefault(); // Prevents page reload
+                const college = searchInput.value.trim();
+                
+                if(college) {
+                    console.log("Starting journey for:", college);
+                    searchInput.value = "Initializing Pathfinder Engine...";
+                    searchInput.disabled = true;
+                    setTimeout(() => {
+                        alert("Transitioning to Phase 1.2: The Conversational Intake!");
+                        window.location.href = '2.html'; // Example redirect
+                    }, 800);
+                } else {
+                    searchInput.focus();
+                    searchInput.classList.add('border-red-500/50');
+                    setTimeout(() => searchInput.classList.remove('border-red-500/50'), 1000);
+                }
+            });
+        });
+    </script>
+    <script src="hub-nav.js"></script>
+</body>
+</html>

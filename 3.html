@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder | Core Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #09090b; color: #fafafa; }
+        .glass { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: linear-gradient(145deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.8) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+        
+        /* Omnibar Dropdown Animation */
+        .dropdown-enter { animation: slideDown 0.2s ease-out forwards; transform-origin: top; }
+        @keyframes slideDown { from { opacity: 0; transform: scaleY(0.95); } to { opacity: 1; transform: scaleY(1); } }
+        
+        /* Paywall / Sandbox Blur */
+        .data-wall { backdrop-filter: blur(8px); background: linear-gradient(to top, #09090b 20%, transparent 100%); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+
+    <aside class="w-64 border-r border-white/10 flex flex-col justify-between hidden lg:flex bg-[#09090b] z-10">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white">P</div>
+                    <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
+                </div>
+            </div>
+            <nav class="p-4 space-y-1 mt-4">
+                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-zinc-800/50 text-cyan-400 border border-white/5">
+                    <span class="font-medium text-sm">Dashboard</span>
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-white/5">
+            <div class="flex items-center justify-between p-2 rounded-xl border border-amber-500/30 bg-amber-500/10" aria-label="Preview Mode Notice">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></div>
+                    <span class="text-xs font-bold text-amber-400">Preview Mode</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-screen overflow-hidden">
+        
+        <header class="h-20 glass flex items-center px-8 z-30 sticky top-0 border-b border-white/5 relative">
+            <div class="w-full max-w-3xl relative mx-auto z-40">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg id="search-icon" class="w-5 h-5 text-cyan-400 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                
+                <!-- Improved: Converted into a form to handle submission -->
+                <form id="omnibar-form" class="w-full">
+                    <input type="text" id="omnibar-input" placeholder="Ask Pathfinder..." autocomplete="off" aria-expanded="false" aria-controls="omnibar-dropdown"
+                           class="w-full bg-zinc-900/90 border border-white/10 text-white text-sm rounded-2xl pl-12 pr-16 py-3.5 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all shadow-lg">
+                </form>
+
+                <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                    <span class="text-xs font-bold text-zinc-500 bg-zinc-800 px-2 py-1 rounded-md border border-white/5">Ctrl K</span>
+                </div>
+
+                <div id="omnibar-dropdown" class="absolute top-full left-0 w-full mt-2 glass border border-white/10 rounded-2xl shadow-2xl hidden flex-col overflow-hidden dropdown-enter" role="menu">
+                    <div class="p-2">
+                        <p class="px-3 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">AI Suggestions</p>
+                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 text-sm text-zinc-300 flex items-center gap-3 transition" role="menuitem">
+                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Show me engineering schools with high acceptance rates
+                        </button>
+                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 text-sm text-zinc-300 flex items-center gap-3 transition" role="menuitem">
+                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Calculate my chance for NYU Early Decision
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="omnibar-overlay" class="fixed inset-0 bg-black/20 hidden -z-10 backdrop-blur-sm transition-all"></div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 pb-32 z-10">
+            <div class="max-w-6xl mx-auto space-y-8">
+                
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-extrabold tracking-tight mb-1 text-zinc-400">Viewing: <span class="text-white">Stanford Example</span></h1>
+                        <p class="text-zinc-500 text-sm">This is a sandbox profile. Connect your data for real predictions.</p>
+                    </div>
+                    <button class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-5 py-2.5 rounded-xl text-sm transition">Connect Profile</button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <div class="glass-card p-6 rounded-3xl border border-white/10">
+                        <h2 class="text-xl font-bold flex items-center gap-2 mb-6">
+                            <span class="w-2 h-2 bg-cyan-400 rounded-full"></span> Live Match Analysis
+                        </h2>
+                        <!-- Container height kept explicitly defined so chart.js resizing works correctly -->
+                        <div class="w-full h-72 relative"><canvas id="radarChart"></canvas></div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl border border-white/10 relative overflow-hidden flex flex-col">
+                        <h2 class="text-xl font-bold flex items-center gap-2 mb-6">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full"></span> Spiky Skill Tree
+                        </h2>
+                        
+                        <div class="flex flex-col items-center space-y-4 pt-2 relative z-0 flex-1">
+                            <div class="w-full max-w-sm glass p-4 rounded-2xl border-cyan-500/50 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex justify-center items-center text-cyan-400 font-bold text-xs">1</div>
+                                <h4 class="font-bold text-white text-sm">Join Robotics Club</h4>
+                            </div>
+                            <div class="w-full max-w-sm glass p-4 rounded-2xl border-cyan-500/50 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex justify-center items-center text-cyan-400 font-bold text-xs">2</div>
+                                <h4 class="font-bold text-white text-sm">Build AI Sorting Robot</h4>
+                            </div>
+                            <div class="w-full max-w-sm glass p-4 rounded-2xl border-white/10 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-zinc-800 flex justify-center items-center text-zinc-500 font-bold text-xs">3</div>
+                                <h4 class="font-bold text-zinc-500 text-sm">Win State Fair</h4>
+                            </div>
+                        </div>
+
+                        <div class="absolute inset-x-0 bottom-0 h-[80%] data-wall z-10 flex flex-col items-center justify-end pb-10 px-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-zinc-800/80 flex items-center justify-center border border-white/10 mb-4 shadow-xl">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2">Unlock Your Roadmap</h3>
+                            <p class="text-sm text-zinc-400 mb-6">Stop looking at the Stanford dummy data. See the exact steps you need to take.</p>
+                            <button class="bg-white hover:bg-zinc-200 text-black font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                Talk to Pathfinder AI
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. OMNIBAR LOGIC ---
+            const omniForm = document.getElementById('omnibar-form');
+            const omniInput = document.getElementById('omnibar-input');
+            const omniDropdown = document.getElementById('omnibar-dropdown');
+            const omniOverlay = document.getElementById('omnibar-overlay');
+            const searchIcon = document.getElementById('search-icon');
+
+            // Ctrl + K Focus
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    omniInput.focus();
+                }
+            });
+
+            // Show dropdown on focus
+            omniInput.addEventListener('focus', () => {
+                omniDropdown.classList.remove('hidden');
+                omniDropdown.classList.add('flex');
+                omniOverlay.classList.remove('hidden');
+                omniInput.setAttribute('aria-expanded', 'true');
+            });
+
+            // Close dropdown when clicking overlay
+            omniOverlay.addEventListener('click', () => {
+                omniDropdown.classList.add('hidden');
+                omniDropdown.classList.remove('flex');
+                omniOverlay.classList.add('hidden');
+                omniInput.setAttribute('aria-expanded', 'false');
+            });
+
+            // Handle Form Submit (Simulate AI Loading)
+            omniForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (omniInput.value.trim() !== '') {
+                    omniDropdown.classList.add('hidden');
+                    omniOverlay.classList.add('hidden');
+                    omniInput.disabled = true;
+                    omniInput.setAttribute('aria-expanded', 'false');
+                    
+                    // Change search icon to a loading spinner visually
+                    searchIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>`;
+                    searchIcon.classList.add('animate-spin', 'text-cyan-400');
+                    
+                    setTimeout(() => {
+                        alert("AI Command Processed: " + omniInput.value);
+                        omniInput.disabled = false;
+                        omniInput.value = '';
+                        searchIcon.classList.remove('animate-spin');
+                        searchIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>`;
+                        omniInput.focus();
+                    }, 1500);
+                }
+            });
+
+            // --- 2. RADAR CHART INIT ---
+            const canvas = document.getElementById('radarChart');
+            if(canvas) {
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels:['GPA', 'Tests', 'Leadership', 'STEM', 'Volunteer', 'Essays'],
+                        datasets: [{
+                            label: 'Stanford Average',
+                            data:[95, 90, 85, 80, 80, 90],
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'rgba(255, 255, 255, 0.3)', borderWidth: 1
+                        }, {
+                            label: 'Dummy Profile',
+                            data:[80, 70, 40, 95, 50, 60],
+                            backgroundColor: 'rgba(245, 158, 11, 0.2)', borderColor: '#f59e0b', borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { r: { angleLines: { color: 'rgba(255,255,255,0.1)' }, grid: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: '#a1a1aa', font: {size: 10} }, ticks: { display: false, min: 0, max: 100 } } },
+                        plugins: { legend: { labels: { color: '#fff' } } }
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="hub-nav.js"></script>
+</body>
+</html>

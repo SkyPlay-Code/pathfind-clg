@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinder | Reality Check</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #09090b; color: #fafafa; }
+        .glass { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: linear-gradient(145deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.8) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+        
+        /* Custom Slider Styling (Cross-browser) */
+        input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+        
+        /* Webkit (Chrome, Safari, Edge) */
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: #22d3ee; cursor: pointer; margin-top: -8px; box-shadow: 0 0 15px rgba(34,211,238,0.5); border: 2px solid #09090b; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #27272a; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Mozilla (Firefox) */
+        input[type=range]::-moz-range-thumb { height: 24px; width: 24px; border-radius: 50%; background: #22d3ee; cursor: pointer; box-shadow: 0 0 15px rgba(34,211,238,0.5); border: 2px solid #09090b; }
+        input[type=range]::-moz-range-track { width: 100%; height: 8px; cursor: pointer; background: #27272a; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+
+    <aside class="w-64 border-r border-white/10 flex flex-col hidden lg:flex bg-[#09090b] z-10">
+        <div class="h-20 flex items-center px-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white">P</div>
+                <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
+            </div>
+        </div>
+        <nav class="p-4 space-y-1 mt-4" aria-label="Main Navigation">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800/50 transition-all">
+                <span class="font-medium text-sm">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-zinc-800/50 text-emerald-400 border border-white/5 transition-all" aria-current="page">
+                <span class="font-medium text-sm">Financial Reality</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-screen overflow-y-auto p-8">
+        <div class="max-w-4xl mx-auto w-full space-y-10 pb-20">
+            
+            <header>
+                <h1 class="text-4xl font-extrabold tracking-tight mb-2">The Reality Check</h1>
+                <p class="text-zinc-400 text-lg">Elite colleges have massive endowments. The sticker price is rarely what you actually pay.</p>
+            </header>
+
+            <div class="glass-card p-8 rounded-3xl border border-white/10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+                <div class="relative z-10">
+                    <h2 class="text-xl font-bold mb-8 text-white" id="income-label">1. Enter your estimated family income</h2>
+                    
+                    <div class="mb-12">
+                        <div class="flex justify-between text-sm font-bold text-emerald-400 mb-4" aria-live="polite">
+                            <span id="income-display">$65,000 / year</span>
+                        </div>
+                        <input type="range" id="income-slider" min="0" max="250000" step="5000" value="65000" class="w-full" aria-labelledby="income-label">
+                        <div class="flex justify-between text-xs text-zinc-500 mt-2 font-medium" aria-hidden="true">
+                            <span>$0</span>
+                            <span>$125k</span>
+                            <span>$250k+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-xl font-bold text-white mt-12 mb-6">2. Your Adjusted "True Cost"</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" aria-live="polite">
+                
+                <div class="glass-card p-6 rounded-[2rem] border border-white/10 relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Harvard University</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Private Ivy League</p>
+                        </div>
+                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-1 rounded">100% NEED MET</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-zinc-500">Advertised Sticker Price:</span>
+                            <span class="text-zinc-400 line-through decoration-red-500/50 decoration-2">$84,000</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-zinc-500">Estimated Aid:</span>
+                            <span id="harvard-aid" class="text-emerald-400 font-bold">-$80,000</span>
+                        </div>
+                        <div class="h-px w-full bg-white/10" aria-hidden="true"></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-zinc-300 font-bold">Your True Cost:</span>
+                            <span id="harvard-cost" class="text-4xl font-black text-white">$4,000<span class="text-sm font-normal text-zinc-500">/yr</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-[2rem] border border-white/10 relative">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">University of Michigan</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Public State (Out-of-State)</p>
+                        </div>
+                        <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold px-2 py-1 rounded">MERIT FOCUS</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-zinc-500">Advertised Sticker Price:</span>
+                            <span class="text-zinc-400 line-through decoration-red-500/50 decoration-2">$76,000</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-zinc-500">Estimated Aid:</span>
+                            <span id="umich-aid" class="text-emerald-400 font-bold">-$20,000</span>
+                        </div>
+                        <div class="h-px w-full bg-white/10" aria-hidden="true"></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-zinc-300 font-bold">Your True Cost:</span>
+                            <span id="umich-cost" class="text-4xl font-black text-white">$56,000<span class="text-sm font-normal text-zinc-500">/yr</span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 glass p-5 rounded-2xl border-cyan-500/30 flex gap-4 items-start bg-cyan-500/5">
+                <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-1 border border-cyan-400">
+                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-1">Pathfinder AI Insight</h4>
+                    <p id="ai-insight" class="text-sm text-zinc-300 leading-relaxed" aria-live="polite">
+                        Based on your income level, Harvard is actually significantly cheaper than a public out-of-state university. Elite private schools cover 100% of demonstrated need without loans.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Formatter for currency
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0
+            });
+
+            // DOM Elements
+            const slider = document.getElementById('income-slider');
+            const incomeDisplay = document.getElementById('income-display');
+            
+            const harvardAidDisplay = document.getElementById('harvard-aid');
+            const harvardCostDisplay = document.getElementById('harvard-cost');
+            
+            const umichAidDisplay = document.getElementById('umich-aid');
+            const umichCostDisplay = document.getElementById('umich-cost');
+
+            const aiInsight = document.getElementById('ai-insight');
+
+            // Constants (Sticker Prices)
+            const harvardSticker = 84000;
+            const umichSticker = 76000;
+
+            // Logic to calculate dynamic aid (Simulating realistic formulas)
+            function calculateAid() {
+                const income = parseInt(slider.value, 10);
+                incomeDisplay.textContent = formatter.format(income) + " / year";
+
+                // Harvard Logic: Free under $85k. 10% of income above that roughly.
+                let harvardCost = 0;
+                if (income > 85000) {
+                    harvardCost = (income - 85000) * 0.15;
+                }
+                if (harvardCost > harvardSticker) harvardCost = harvardSticker;
+                const harvardAid = harvardSticker - harvardCost;
+
+                // UMich Out of State Logic: Less generous with need-based aid out of state.
+                let umichCost = umichSticker;
+                let umichAid = 0;
+                if (income < 65000) {
+                    umichAid = 30000; // Max grant roughly
+                } else if (income < 120000) {
+                    umichAid = 15000;
+                }
+                umichCost = umichSticker - umichAid;
+
+                // Update DOM
+                harvardAidDisplay.textContent = "-" + formatter.format(harvardAid);
+                harvardCostDisplay.innerHTML = `${formatter.format(harvardCost)}<span class="text-sm font-normal text-zinc-500">/yr</span>`;
+
+                umichAidDisplay.textContent = "-" + formatter.format(umichAid);
+                umichCostDisplay.innerHTML = `${formatter.format(umichCost)}<span class="text-sm font-normal text-zinc-500">/yr</span>`;
+
+                // Dynamic AI Insight Text
+                if (harvardCost < umichCost) {
+                    aiInsight.textContent = "Notice how the elite private school (Harvard) is currently cheaper than the public school (UMich)? Elite schools often meet 100% of demonstrated need for incomes in your bracket.";
+                } else {
+                    aiInsight.textContent = "At this income level, need-based aid drops off. You should begin heavily targeting Merit-Based scholarships or in-state public universities to avoid significant debt.";
+                }
+            }
+
+            // Event Listener
+            slider.addEventListener('input', calculateAid);
+            
+            // Initial Calculation on load
+            calculateAid();
+        });
+    </script>
+    <script src="hub-nav.js"></script>
+</body>
+</html>
