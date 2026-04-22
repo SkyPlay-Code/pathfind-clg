@@ -24,18 +24,26 @@
 <!-- Switched to h-[100dvh] and added relative for mobile header positioning -->
 <body class="flex h-[100dvh] overflow-hidden antialiased selection:bg-zinc-800 selection:text-white relative">
 
-    <aside class="w-64 border-r border-zinc-800/60 bg-[#0a0a0a] flex flex-col justify-between hidden lg:flex z-10" aria-label="Sidebar Navigation">
+    <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-zinc-800/60 bg-[#0a0a0a] z-50 w-full fixed top-0 left-0">
+        <div class="flex items-center gap-2.5">
+            <div class="w-5 h-5 bg-zinc-200 rounded-sm flex items-center justify-center font-bold text-black text-[10px]">P</div>
+            <span class="font-semibold text-zinc-200 text-sm tracking-tight">Pathfinder</span>
+        </div>
+        <button aria-label="Toggle Sidebar" class="p-2 text-zinc-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
+    <aside class="w-64 border-r border-zinc-800/60 bg-[#0a0a0a] flex flex-col justify-between hidden lg:flex z-10">
         <div>
-            <!-- Added: Mobile Nav Toggle (Executive Theme) -->
-            <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-zinc-800/60 bg-[#0a0a0a] z-40 shrink-0 w-full absolute top-0 left-0">
+            <!-- 2. Desktop Branding (FIX: Restored to Sidebar) -->
+            <div class="h-14 flex items-center px-5 border-b border-zinc-800/60">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-5 h-5 bg-zinc-200 rounded-sm flex items-center justify-center font-bold text-black text-xs" aria-hidden="true">P</div>
+                    <div class="w-5 h-5 bg-zinc-200 rounded-sm flex items-center justify-center font-bold text-black text-[10px]">P</div>
                     <span class="font-semibold text-zinc-200 text-sm tracking-tight">Pathfinder</span>
                 </div>
-                <button aria-label="Toggle Sidebar" class="p-2 -m-2 text-zinc-400 hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
             </div>
+
             
             <nav class="p-3 space-y-0.5 mt-2">
                 <p class="px-3 text-[10px] font-semibold text-zinc-500 uppercase tracking-widest mb-2" aria-hidden="true">Workspace</p>

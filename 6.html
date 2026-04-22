@@ -39,16 +39,23 @@
 
     <div id="crunch-vignette" aria-hidden="true"></div>
 
+    <!-- Added: Mobile Nav Toggle (Mirrors your other pages) -->
+    <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#09090b] z-40 shrink-0 w-full absolute top-0 left-0">
+        <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white text-xs">P</div>
+            <span class="font-bold text-sm tracking-wide">Pathfinder</span>
+        </div>
+        <button aria-label="Toggle Sidebar" class="p-2 -m-2 text-zinc-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
     <aside class="w-64 border-r border-white/10 flex flex-col hidden lg:flex bg-transparent z-10 relative backdrop-blur-xl">
-        <!-- Added: Mobile Nav Toggle (Mirrors your other pages) -->
-        <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#09090b] z-40 shrink-0 w-full absolute top-0 left-0">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white text-xs">P</div>
-                <span class="font-bold text-sm tracking-wide">Pathfinder</span>
+        <div class="h-20 flex items-center px-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div id="logo-block" class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white transition-all duration-500">P</div>
+                <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
             </div>
-            <button aria-label="Toggle Sidebar" class="p-2 -m-2 text-zinc-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
         </div>
         <nav class="p-4 space-y-1 mt-4 transition-all" id="nav-menu" aria-label="Main Navigation">
             <a href="#" id="nav-discovery" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800/50 transition-all">
