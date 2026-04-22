@@ -24,15 +24,20 @@
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden antialiased">
+<!-- Switched to dvh -->
+<body class="flex h-[100dvh] overflow-hidden antialiased">
 
     <aside class="w-64 border-r border-white/10 flex flex-col justify-between hidden lg:flex bg-[#09090b] z-10">
         <div>
-            <div class="h-20 flex items-center px-6 border-b border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white">P</div>
-                    <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
+            <!-- Mobile Nav Toggle -->
+            <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#09090b] z-40 shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white text-xs">P</div>
+                    <span class="font-bold text-sm tracking-wide">Pathfinder</span>
                 </div>
+                <button aria-label="Toggle Sidebar" class="p-2 text-zinc-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
             <nav class="p-4 space-y-1 mt-4">
                 <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-zinc-800/50 text-cyan-400 border border-white/5">
@@ -68,14 +73,15 @@
                     <span class="text-xs font-bold text-zinc-500 bg-zinc-800 px-2 py-1 rounded-md border border-white/5">Ctrl K</span>
                 </div>
 
-                <div id="omnibar-dropdown" class="absolute top-full left-0 w-full mt-2 glass border border-white/10 rounded-2xl shadow-2xl hidden flex-col overflow-hidden dropdown-enter" role="menu">
+                <div id="omnibar-dropdown" class="absolute top-full left-0 w-full mt-2 glass border border-white/10 rounded-2xl shadow-2xl hidden flex-col overflow-hidden dropdown-enter" role="listbox">
                     <div class="p-2">
                         <p class="px-3 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">AI Suggestions</p>
-                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 text-sm text-zinc-300 flex items-center gap-3 transition" role="menuitem">
+                        <!-- Roles changed to option, added focus-visible -->
+                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 focus-visible:bg-zinc-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 text-sm text-zinc-300 flex items-center gap-3 transition" role="option">
                             <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             Show me engineering schools with high acceptance rates
                         </button>
-                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 text-sm text-zinc-300 flex items-center gap-3 transition" role="menuitem">
+                        <button class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-zinc-800/50 focus-visible:bg-zinc-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 text-sm text-zinc-300 flex items-center gap-3 transition" role="option">
                             <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             Calculate my chance for NYU Early Decision
                         </button>

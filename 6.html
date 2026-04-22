@@ -33,16 +33,22 @@
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
     </style>
 </head>
-<body id="app-body" class="flex h-screen overflow-hidden antialiased relative">
+<!-- Switched to h-[100dvh] -->
+<body id="app-body" class="flex h-[100dvh] overflow-hidden antialiased relative">
+
 
     <div id="crunch-vignette" aria-hidden="true"></div>
 
     <aside class="w-64 border-r border-white/10 flex flex-col hidden lg:flex bg-transparent z-10 relative backdrop-blur-xl">
-        <div class="h-20 flex items-center px-6 border-b border-white/5">
-            <div class="flex items-center gap-3">
-                <div id="logo-block" class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white transition-all duration-500">P</div>
-                <span class="font-extrabold tracking-wide text-lg">Pathfinder</span>
+        <!-- Added: Mobile Nav Toggle (Mirrors your other pages) -->
+        <div class="lg:hidden h-14 flex items-center justify-between px-4 border-b border-white/5 bg-[#09090b] z-40 shrink-0 w-full absolute top-0 left-0">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white text-xs">P</div>
+                <span class="font-bold text-sm tracking-wide">Pathfinder</span>
             </div>
+            <button aria-label="Toggle Sidebar" class="p-2 -m-2 text-zinc-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
         <nav class="p-4 space-y-1 mt-4 transition-all" id="nav-menu" aria-label="Main Navigation">
             <a href="#" id="nav-discovery" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-400 hover:bg-zinc-800/50 transition-all">
@@ -54,11 +60,13 @@
         </nav>
     </aside>
 
-    <main class="flex-1 flex flex-col relative h-screen overflow-y-auto p-8 z-10">
+    <!-- Added mt-14 lg:mt-0 to account for absolute mobile header -->
+    <main class="flex-1 flex flex-col relative h-[100dvh] overflow-y-auto p-4 md:p-8 z-10 mt-14 lg:mt-0">
         
-        <div class="absolute top-4 right-8 bg-zinc-900 border border-white/10 p-2 rounded-xl flex items-center gap-4 z-50 shadow-2xl">
-            <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Simulate Time:</span>
-            <button id="toggle-time-btn" aria-pressed="false" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold px-4 py-2 rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+        <!-- Adjusted positioning for mobile, added focus-visible and min-h-[44px] -->
+        <div class="absolute top-4 right-4 md:right-8 bg-zinc-900 border border-white/10 p-2 rounded-xl flex items-center gap-2 md:gap-4 z-50 shadow-2xl scale-90 md:scale-100 origin-top-right">
+            <span class="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest hidden sm:inline">Simulate Time:</span>
+            <button id="toggle-time-btn" aria-pressed="false" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-bold px-4 py-2 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg transition shadow-[0_0_15px_rgba(34,211,238,0.2)]">
                 Fast Forward to Nov 1st
             </button>
         </div>
